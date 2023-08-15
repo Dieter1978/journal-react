@@ -6,7 +6,7 @@ const CategorySelection = () => {
 
   useEffect(() => {
     const getCats = async () =>{
-    const res = await fetch('http://localhost:5175/categories')
+    const res = await fetch('https://express-journal-api-ccwk.onrender.com/categories')
     const data = await res.json()
     setCategories(data)
   }

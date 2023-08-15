@@ -53,7 +53,7 @@ const App = () => {
   async function updateEntry (entry, content){
     const id = entries.length
 
-    const returnedEntry = await fetch(`http://localhost:5175/entries/${entry._id}`,{ method: 'PUT', 
+    const returnedEntry = await fetch(`https://express-journal-api-ccwk.onrender.com/entries/${entry._id}`,{ method: 'PUT', 
     headers: {"Content-type": "application/json"},
     body : JSON.stringify({content})
     })
