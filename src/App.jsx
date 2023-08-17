@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useEffect, useReducer} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -17,19 +17,52 @@ import {useParams, useNavigate } from 'react-router-dom'
 // ]
 
 
+function reducer(currentState, action){
+  switch (action.type){
+    case 'setEntries' :
+      return {
+         ...currentState,
+        entries : action.entries
+      }
+    case 'addEntry' :
+      return {
+        ...currentState,
+        entries : [...currentState.entries, action.entry]
+      }
+    default:
+      return currentState
+  }
+  
+}
+
+const initialState =
+{
+  entries : [],
+  categories : []
+}
 
 const App = () => {
   const nav = useNavigate()
-  const [entries,setEntries] = useState([])
+  //const [entries,setEntries] = useState([])
+
+  const [store, dispatch] = useReducer(reducer,initialState)
+  const {entries} = store
+ 
   
   useEffect(() => {
     (
     async () => {
     const res = await fetch('http://localhost:5175/entries')
     const data = await res.json()
-    setEntries(data)
+    //setEntries(data)
+    dispatch({
+      type : 'setEntries',
+      entries : data,
+    })
     }
     )()
+
+
   },[])
   //const {id} = useParams()
   //console.log(`id: ${id}`)
@@ -45,7 +78,11 @@ const App = () => {
     body : JSON.stringify({category, content})
     })
 
-    setEntries([...entries,await returnedEntry.json()])
+    //setEntries([...entries,await returnedEntry.json()])
+    dispatch({
+      type : 'addEntry',
+      entry : await returnedEntry.json(),
+    })
 
     nav(`/entry/${id}`)
   }
@@ -81,7 +118,7 @@ const App = () => {
           <Route path='/' element={<Home entries={entries} />} />
           <Route path='/category' element={<CategorySelection/>} />
           <Route path="/entry">
-              <Route path='new' element={<CategorySelection/>} />
+              <Route path='new/:category' element={<NewEntry addEntry={addEntry}/>} />
               <Route path=':id' element={ <ShowEntryWrapper/> }/>
             
           </Route>
