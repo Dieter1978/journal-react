@@ -40,7 +40,7 @@ const App = () => {
     
     const id = entries.length
     //Add the entry
-    const returnedEntry = await fetch('http://localhost:5175/entries',{ method: 'POST', 
+    const returnedEntry = await fetch('http://express-journal-api-ccwk.onrender.com/entries',{ method: 'POST', 
     headers: {"Content-type": "application/json"},
     body : JSON.stringify({category, content})
     })
